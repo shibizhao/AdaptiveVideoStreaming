@@ -1,7 +1,7 @@
 # Author: Bizhao Shi
 # Website: https://github.com/shibizhao/Adaptive-Video-Streaming-Lab
 # E-mail: shi_bizhao@pku.edu.cn
-# Description: (version 1.2.2) 
+# Description: (version 2.2) 
 #   A robust MPC implementation of adaptive bitrate selection to realize the maximum QoE
 #   An implementation of FastMPC method using a vectorization Look-up Table.
 # Update:
@@ -61,7 +61,6 @@ def initialLookUpTable():
             for i in contentArray:
                 if i[0] != '\n':
                     lookupTable.append(int(i))
-            assert len(lookupTable) == 15000
         else:
             break
     enumFP.close()
@@ -70,7 +69,7 @@ def initialLookUpTable():
 def Decision(bfSize, dlTime, curOp):
     
     flt1d = round(bfSize, 0)
-    flt1d = min(flt1d, 25.0)
+    flt1d = min(flt1d, 30.0)
     fltid = max(flt1d, 1.0)
     flt2d = round(dlTime / 0.04, 0) * 0.04
     flt2d = min(flt2d, 4.00)
@@ -147,7 +146,6 @@ def main():
         historyState[2, -1] = rebuffer
         historyState[3, -1] = float(currentVideoChunkSize) / float(delay) / bitsFactor
         historyState[4, -1] = np.minimum(chunkRemainCount, defaultChunkCountToEnd) / float(defaultChunkCountToEnd)
-        historyState[5, -1] = currentBitRateOption
 
         # MPC kernel begin
         # calculate the normaliztion estimated error of bandwidth
@@ -181,6 +179,7 @@ def main():
             allDownloadTime.append((float(nextVideoChunkSize[option]) / (bitsFactor * bitsFactor))/ currentPredBW)
 
         finalOption = Decision(currentBufferSize, allDownloadTime[0], currentBitRateOption)
+        currentBitRateOption = finalOption
 
         assert finalOption >= 0
         if endFlag:

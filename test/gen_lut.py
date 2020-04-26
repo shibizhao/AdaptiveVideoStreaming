@@ -44,7 +44,7 @@ for solution in itertools.product([i for i in range(bitRatesTypes)],
 
 # produce the bufferSizeLevel list
 bufferSizeStart = 1
-bufferSizeEnd = 26
+bufferSizeEnd = 31
 bufferSizeStride = 1.0
 bufferSizeLevelList = [float(i * bufferSizeStride) for i in range(bufferSizeStart, bufferSizeEnd)]
 
@@ -84,8 +84,11 @@ def main():
                     for pos in range(0, defaultFutureChunkCount):
                         thisChunkOption = localSolution[pos]
                         downloadTime = currentAllDownLoadTime[thisChunkOption]
-                        localRebufferTime += max(0, downloadTime - localCurrentBufferSize)
-                        localCurrentBufferSize -= min(localCurrentBufferSize, downloadTime)
+                        if localCurrentBufferSize < downloadTime:
+                            localRebufferTime += downloadTime - localCurrentBufferSize
+                            localCurrentBufferSize = 0
+                        else:
+                            localCurrentBufferSize -= downloadTime
                         # This 4 means the play speed
                         localCurrentBufferSize += 4
                         localBitRateSum += bitRatesOptions[thisChunkOption]

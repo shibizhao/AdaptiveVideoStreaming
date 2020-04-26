@@ -15,7 +15,13 @@ mkdir results
 python bb.py
 ```
 
- If you want to test the MPC method without any optimization, run
+  If you want to test the MPC method from Pensieve project, run
+
+```
+python mpc_pensieve.py
+```
+
+If you want to test the MPC method without any optimization, run
 
 ```
 python mpc_naive.py
@@ -48,6 +54,6 @@ python mpc_vec_lut.py
 If you want to draw the plots, make sure the ```plots``` folder exists, then run
 
 ```
-python plot.py
+python plot_results.py
 ```
 

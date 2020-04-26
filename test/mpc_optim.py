@@ -179,8 +179,11 @@ def main():
             for pos in range(0, currentFutureChunkCount):
                 thisChunkOption = localSolution[pos]
                 downloadTime =  allDownloadTime[thisChunkOption]
-                localRebufferTime += max(0, downloadTime - localCurrentBufferSize)
-                localCurrentBufferSize -= min(localCurrentBufferSize, downloadTime)
+                if localCurrentBufferSize < downloadTime:
+                    localRebufferTime += downloadTime - localCurrentBufferSize
+                    localCurrentBufferSize = 0
+                else:
+                    localCurrentBufferSize -= downloadTime
                 # This 4 means the play speed
                 localCurrentBufferSize += 4
                 localBitRateSum += bitRatesOptions[thisChunkOption]
@@ -213,7 +216,7 @@ def main():
             if videoCount >= len(allFileNames):
                 break
 
-            outputFileName = outputFilePrefix + allFileNames[netEnvironment.trace_idx]
+            outputFileName = outputFilePrefix + "_optim_" + allFileNames[netEnvironment.trace_idx]
             outputFilePointer = open(outputFileName, "wb")
 
 if __name__ == '__main__':

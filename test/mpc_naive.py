@@ -217,7 +217,7 @@ def main():
             if videoCount >= len(allFileNames):
                 break
 
-            outputFileName = outputFilePrefix + "_" + allFileNames[netEnvironment.trace_idx]
+            outputFileName = outputFilePrefix + "_naive_" + allFileNames[netEnvironment.trace_idx]
             outputFilePointer = open(outputFileName, "wb")
 
 if __name__ == '__main__':
